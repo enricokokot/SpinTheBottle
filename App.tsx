@@ -8,13 +8,16 @@
  * @format
  */
 
-import React, {type PropsWithChildren} from 'react';
+import React, {type PropsWithChildren, useState, useEffect} from 'react';
 import {
+  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
+  Touchable,
+  TouchableOpacity,
   useColorScheme,
   View,
 } from 'react-native';
@@ -64,9 +67,66 @@ const App = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const [diceLeftNumber, setDiceLeftNumber] = useState(0);
+  const [diceRightNumber, setDiceRightNumber] = useState(5);
+  const [naughtyStatus, setNaughtyStatus] = useState(false);
+  // const [history, setHistory] = useState([])
+
+  const generateRandomNumber = (aSet: string[]) =>
+    Math.floor(Math.random() * aSet.length);
+
+  const rollBothDice = () => {
+    rollLeftDie();
+    rollRightDie();
+  };
+
+  const rollLeftDie = () => {
+    setDiceLeftNumber(generateRandomNumber(diceLeftStatus));
+  };
+
+  const rollRightDie = () => {
+    setDiceRightNumber(generateRandomNumber(diceRightStatus));
+  };
+
+  const diceLeftStatus = [
+    'tease',
+    'lick',
+    'bite',
+    'kiss',
+    'spank',
+    "player's choice",
+  ];
+
+  const diceLeftStatusNaughty = [
+    'tease',
+    'lick',
+    'bite',
+    'kiss',
+    'spank',
+    "player's choice",
+  ];
+
+  const diceRightStatus = [
+    'nipples',
+    'inner thigh',
+    'butt',
+    'breasts',
+    'earlobes',
+    'neck',
+  ];
+
+  const diceRightStatusNaughty = [
+    'nipples',
+    'clitoris',
+    'butt',
+    'breasts',
+    'earlobes',
+    'neck',
+  ];
+
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar
+      {/* <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
@@ -93,7 +153,35 @@ const App = () => {
           </Section>
           <LearnMoreLinks />
         </View>
-      </ScrollView>
+      </ScrollView> */}
+      <View style={styles.mainContainer}>
+        <TouchableOpacity style={styles.naughtyToggle}>
+          <Text
+            style={styles.infoPoints}
+            onPress={() => setNaughtyStatus(!naughtyStatus)}>
+            Naughty mode is {naughtyStatus ? 'ON ' : 'OFF'}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.die} onPress={() => rollLeftDie()}>
+          <Text style={styles.dieText}>
+            {naughtyStatus
+              ? diceLeftStatus[diceLeftNumber]
+              : diceLeftStatusNaughty[diceLeftNumber]}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.die} onPress={() => rollRightDie()}>
+          <Text style={styles.dieText}>
+            {naughtyStatus
+              ? diceRightStatusNaughty[diceRightNumber]
+              : diceRightStatus[diceRightNumber]}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.rollButton}>
+          <Text style={styles.infoPoints} onPress={() => rollBothDice()}>
+            ROLL
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -114,6 +202,52 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  die: {
+    backgroundColor: 'white',
+    minWidth: 150,
+    minHeight: 150,
+    maxWidth: 150,
+    maxHeight: 150,
+    margin: 10,
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  dieText: {
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+    textAlign: 'center',
+    width: 80,
+  },
+  mainContainer: {
+    flexDirection: 'row',
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
+  naughtyToggle: {
+    position: 'absolute',
+    top: 20,
+    backgroundColor: 'red',
+    height: '6%',
+    width: '100%',
+    justifyContent: 'center',
+  },
+  rollButton: {
+    position: 'absolute',
+    bottom: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    height: '6%',
+    width: '100%',
+    justifyContent: 'center',
+  },
+  infoPoints: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
   },
 });
 
