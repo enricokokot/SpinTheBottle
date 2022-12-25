@@ -29,6 +29,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Die from './Die';
 
 const Section: React.FC<
   PropsWithChildren<{
@@ -70,14 +71,20 @@ const App = () => {
   const [diceLeftNumber, setDiceLeftNumber] = useState(0);
   const [diceRightNumber, setDiceRightNumber] = useState(5);
   const [naughtyStatus, setNaughtyStatus] = useState(false);
+  const [roll, setRoll] = useState(false);
+  const [buttonDisability, setButtonDisability] = useState(false);
   // const [history, setHistory] = useState([])
 
   const generateRandomNumber = (aSet: string[]) =>
     Math.floor(Math.random() * aSet.length);
 
   const rollBothDice = () => {
-    rollLeftDie();
-    rollRightDie();
+    // rollLeftDie();
+    // rollRightDie();
+    setRoll(true);
+    setTimeout(() => setRoll(false), 100);
+    setButtonDisability(true);
+    setTimeout(() => setButtonDisability(false), 4000);
   };
 
   const rollLeftDie = () => {
@@ -107,21 +114,21 @@ const App = () => {
   ];
 
   const diceRightStatus = [
+    'neck',
     'nipples',
     'inner thigh',
     'butt',
     'breasts',
     'earlobes',
-    'neck',
   ];
 
   const diceRightStatusNaughty = [
+    'neck',
     'nipples',
     'clitoris',
     'butt',
     'breasts',
     'earlobes',
-    'neck',
   ];
 
   return (
@@ -155,14 +162,14 @@ const App = () => {
         </View>
       </ScrollView> */}
       <View style={styles.mainContainer}>
-        <TouchableOpacity style={styles.naughtyToggle}>
-          <Text
-            style={styles.infoPoints}
-            onPress={() => setNaughtyStatus(!naughtyStatus)}>
+        <TouchableOpacity
+          style={styles.naughtyToggle}
+          onPress={() => setNaughtyStatus(!naughtyStatus)}>
+          <Text style={styles.infoPoints}>
             Naughty mode is {naughtyStatus ? 'ON ' : 'OFF'}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.die} onPress={() => rollLeftDie()}>
+        {/* <TouchableOpacity style={styles.die} onPress={() => rollLeftDie()}>
           <Text style={styles.dieText}>
             {naughtyStatus
               ? diceLeftStatus[diceLeftNumber]
@@ -175,11 +182,20 @@ const App = () => {
               ? diceRightStatusNaughty[diceRightNumber]
               : diceRightStatus[diceRightNumber]}
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.rollButton}>
-          <Text style={styles.infoPoints} onPress={() => rollBothDice()}>
-            ROLL
-          </Text>
+        </TouchableOpacity> */}
+        <View style={{position: 'absolute', flexDirection: 'row'}}>
+          <Die set={diceLeftStatus} roll={roll} naughtyStatus={naughtyStatus} />
+          <Die
+            set={naughtyStatus ? diceRightStatusNaughty : diceRightStatus}
+            roll={roll}
+            naughtyStatus={naughtyStatus}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.rollButton}
+          onPress={() => rollBothDice()}
+          disabled={buttonDisability}>
+          <Text style={styles.infoPoints}>ROLL</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -237,12 +253,13 @@ const styles = StyleSheet.create({
   },
   rollButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 30,
     backgroundColor: 'white',
-    borderRadius: 10,
-    height: '6%',
-    width: '100%',
+    borderRadius: 100,
+    height: 100,
+    width: 100,
     justifyContent: 'center',
+    elevation: 0,
   },
   infoPoints: {
     textAlign: 'center',
