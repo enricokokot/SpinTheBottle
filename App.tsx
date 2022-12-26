@@ -185,7 +185,7 @@ const App = () => {
           <Animated.Text
             style={[styles.infoPoints, styles.white]}
             onPress={() => naughtyStatusChange()}>
-            Naughty mode is ON
+            Naughty mode
           </Animated.Text>
         </Animated.View>
         {/* <TouchableOpacity style={styles.die} onPress={() => rollLeftDie()}>
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
   naughtyToggle: {
     position: 'absolute',
     top: 20,
-    backgroundColor: 'red',
+    backgroundColor: 'black',
     height: '6%',
     width: '100%',
     justifyContent: 'center',
