@@ -10,6 +10,7 @@
 
 import React, {type PropsWithChildren, useState, useEffect} from 'react';
 import {
+  Animated,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -74,6 +75,24 @@ const App = () => {
   const [roll, setRoll] = useState(false);
   const [buttonDisability, setButtonDisability] = useState(false);
   // const [history, setHistory] = useState([])
+  const [trans, setTrans] = useState(new Animated.Value(0));
+
+  const fadeInAnimation = Animated.timing(trans, {
+    toValue: 1,
+    duration: 1000,
+    useNativeDriver: true,
+  });
+
+  const fadeOutAnimation = Animated.timing(trans, {
+    toValue: 0,
+    duration: 2000,
+    useNativeDriver: true,
+  });
+
+  const naughtyStatusChange = () => {
+    setNaughtyStatus(!naughtyStatus);
+    naughtyStatus ? fadeOutAnimation.start() : fadeInAnimation.start();
+  };
 
   const generateRandomNumber = (aSet: string[]) =>
     Math.floor(Math.random() * aSet.length);
@@ -162,13 +181,13 @@ const App = () => {
         </View>
       </ScrollView> */}
       <View style={styles.mainContainer}>
-        <TouchableOpacity
-          style={styles.naughtyToggle}
-          onPress={() => setNaughtyStatus(!naughtyStatus)}>
-          <Text style={styles.infoPoints}>
-            Naughty mode is {naughtyStatus ? 'ON ' : 'OFF'}
-          </Text>
-        </TouchableOpacity>
+        <Animated.View style={[styles.naughtyToggle, , {opacity: trans}]}>
+          <Animated.Text
+            style={[styles.infoPoints, styles.white]}
+            onPress={() => naughtyStatusChange()}>
+            Naughty mode is ON
+          </Animated.Text>
+        </Animated.View>
         {/* <TouchableOpacity style={styles.die} onPress={() => rollLeftDie()}>
           <Text style={styles.dieText}>
             {naughtyStatus
@@ -265,6 +284,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  white: {
+    color: 'white',
   },
 });
 
