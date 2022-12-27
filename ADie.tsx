@@ -9,12 +9,14 @@ const ADie = (props: {
   style: Object;
   //   onPush: () => void;
   //   onHold: () => void;
+  value: string | number;
 }) => {
-  const index = 4;
-  const value = props.values[index];
+  // const index = 4;
+  // const value = props.values[index];
+  const value = props.value;
 
   return (
-    <TouchableOpacity
+    <View
       //   onPress={() => props.onPush()}
       //   onLongPress={() => props.onHold()}
       style={[
@@ -41,7 +43,7 @@ const ADie = (props: {
         }}>
         {value}
       </Text>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -62,6 +64,7 @@ ADie.defaultProps = {
   style: [],
   //   onPush: () => console.log('button pushed'),
   //   onHold: () => console.log('button held'),
+  value: 0,
 };
 
 export default ADie;

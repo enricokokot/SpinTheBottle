@@ -1,13 +1,23 @@
 import {useState} from 'react';
-import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Animated,
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ADie from './ADie';
+import CircleButton from './CircleButton';
 import Die from './Die';
+import {transformer} from './metro.config';
 
 const LiarsDice = () => {
   const numbers = [1, 2, 3, 4, 5, 6].map(number => number.toString());
   const [buttonDisability, setButtonDisability] = useState(false);
   const [roll, setRoll] = useState(false);
   const [dice, setDice] = useState([1, 2, 3, 4, 5]);
+  const [diceValue, setDiceValue] = useState([1, 2, 3, 4, 5, 6]);
 
   const rollBothDice = () => {
     // rollLeftDie();
@@ -18,28 +28,40 @@ const LiarsDice = () => {
     setTimeout(() => setButtonDisability(false), 4000);
   };
 
+  const rollDice = () =>
+    setDiceValue(
+      diceValue.map(() => Math.floor(Math.random() * diceValue.length) + 1),
+    );
+
+  const resetDice = () => {
+    setDice([1, 2, 3, 4, 5]);
+    rollDice();
+  };
+
   return (
-    <View
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        // backgroundColor: 'black',
-        flexGrow: 20,
-      }}>
-      {/* <ADie size={300} />
+    <View style={{flexGrow: 20}}>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          // backgroundColor: 'black',
+          flexGrow: 20,
+        }}>
+        {/* <ADie size={300} />
       <ADie size={150} /> */}
-      {dice.map(die => (
-        <TouchableOpacity
-          key={die}
-          onPress={() => setDice(dice.filter(dio => dio !== die))}>
-          <ADie
-            size={120}
-            style={{transform: [{rotate: '-90deg'}]}}
-            values={[1, 2, 3, 4, 5, 6]}
-          />
-        </TouchableOpacity>
-      ))}
-      {/* <ADie
+        {dice.map(die => (
+          <TouchableOpacity
+            key={die}
+            onLongPress={() => setDice(dice.filter(dio => dio !== die))}>
+            <ADie
+              size={110}
+              style={{transform: [{rotate: '-90deg'}]}}
+              values={[1, 2, 3, 4, 5, 6]}
+              value={diceValue[die]}
+            />
+          </TouchableOpacity>
+        ))}
+        {/* <ADie
         size={120}
         values={[1, 2, 3, 4, 5, 6]}
         style={{
@@ -48,7 +70,7 @@ const LiarsDice = () => {
           // transform: [{translateX: 20}, {rotate: '20deg'}],
         }}
       /> */}
-      {/* <Animated.View style={styles.die}>
+        {/* <Animated.View style={styles.die}>
         <Die set={numbers} roll={roll} naughtyStatus={false} />
       </Animated.View>
       <Animated.View style={styles.die}>
@@ -69,6 +91,25 @@ const LiarsDice = () => {
         disabled={buttonDisability}>
         <Text style={styles.infoPoints}>ROLL</Text>
       </TouchableOpacity> */}
+      </View>
+      <View
+        style={{
+          position: 'absolute',
+          right: '5%',
+          top: '35%',
+          bottom: '35%',
+        }}>
+        <TouchableOpacity
+          onLongPress={() => rollDice()}
+          style={[{transform: [{rotate: '-90deg'}]}]}>
+          <CircleButton text="ROLL" size={100} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onLongPress={() => resetDice()}
+          style={[{transform: [{rotate: '-90deg'}]}]}>
+          <CircleButton text="RESET" size={100} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
