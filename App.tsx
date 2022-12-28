@@ -11,7 +11,7 @@ const App = () => {
     <NavigationContainer>
       <Tab.Navigator screenOptions={{tabBarStyle: {display: 'none'}}}>
         <Tab.Screen name="LiarsDice" component={LiarsDice} />
-        <Tab.Screen name="HotDice" component={HotDice} />
+        {/* <Tab.Screen name="HotDice" component={HotDice} /> */}
       </Tab.Navigator>
     </NavigationContainer>
   );
